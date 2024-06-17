@@ -1,4 +1,4 @@
-package com.devProject.jwtsecurity.auth;
+package common.model;
 
 import com.devProject.jwtsecurity.user.Role;
 

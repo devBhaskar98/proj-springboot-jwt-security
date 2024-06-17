@@ -1,6 +1,7 @@
 package com.devProject.jwtsecurity.token;
 
 import com.devProject.jwtsecurity.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,5 +40,6 @@ public class Token {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
+  @JsonBackReference // To handle bidirectional relationship
   public User user;
 }

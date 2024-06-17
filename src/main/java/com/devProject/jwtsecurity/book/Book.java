@@ -4,7 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +29,9 @@ public class Book {
 
     @Id
     @GeneratedValue
+    // By default hibernate use 50 space of sequence hence sequence jumps in each run
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence_gen")
+//    @SequenceGenerator(name = "my_sequence_gen", sequenceName = "book_seq", allocationSize = 1)
     private Integer id;
     private String author;
     private String isbn;
