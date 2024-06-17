@@ -52,7 +52,7 @@ public class AuthenticationService {
 //    var jwtToken = jwtService.generateToken(user);
 		var refreshToken = jwtService.generateRefreshToken(user);
 		saveUserToken(savedUser, jwtToken);
-		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
+		return AuthenticationResponse.builder().emailId(request.getEmail()).accessToken(jwtToken).refreshToken(refreshToken).build();
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -64,7 +64,7 @@ public class AuthenticationService {
 		var refreshToken = jwtService.generateRefreshToken(user);
 		revokeAllUserTokens(user);
 		saveUserToken(user, jwtToken);
-		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
+		return AuthenticationResponse.builder().emailId(request.getEmail()).accessToken(jwtToken).refreshToken(refreshToken).build();
 	}
 
 	private void saveUserToken(User user, String jwtToken) {
