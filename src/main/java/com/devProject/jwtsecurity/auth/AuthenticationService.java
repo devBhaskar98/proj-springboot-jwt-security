@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import common.model.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +42,18 @@ public class AuthenticationService {
 		var user = User.builder().firstname(request.getFirstname()).lastname(request.getLastname())
 				.email(request.getEmail()).password(passwordEncoder.encode(request.getPassword()))
 				.role(request.getRole()).build();
-		var savedUser = repository.save(user);
+		User savedUser;
+		
+		try {
+			savedUser = repository.save(user);
+		} catch(ConstraintViolationException e) {
+			throw(e);
+		} catch(Exception e) {
+			throw(e);
+		}
+		
+		
+		
 
 		// add more claims to the token
 		Map<String, Object> userClaims = new HashMap<String, Object>();

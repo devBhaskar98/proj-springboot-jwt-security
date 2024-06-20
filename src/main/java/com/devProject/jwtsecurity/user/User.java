@@ -7,6 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -32,6 +35,9 @@ public class User implements UserDetails {
   private Integer id;
   private String firstname;
   private String lastname;
+  
+  @NotBlank(message = "Email is mandatory")
+  @Email(message = "Email should be valid")
   private String email;
   private String password;
 
