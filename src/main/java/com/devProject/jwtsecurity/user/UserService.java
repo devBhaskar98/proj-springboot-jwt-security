@@ -50,9 +50,7 @@ public class UserService {
 	public List<User> getManagerUsers() {
 		User user = getCurrentUser();
 //		System.out.println("Current User::" + user);
-		List<User> users = userRepository.findByRole(user.getRole());
-
-		return users;
+		return userRepository.findByRole(user.getRole());
 	}
 
 	public String updateUser(int userId, UpdateUserRequest user) {
@@ -70,5 +68,11 @@ public class UserService {
 		User updateUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 		userRepository.deleteById(updateUser.getId());
 		return "Delete Successfully";
+	}
+	
+	// ADMINS
+	public List<User> getAdminUsers() {
+		User user = getCurrentUser();
+		return userRepository.findByRole(user.getRole());
 	}
 }

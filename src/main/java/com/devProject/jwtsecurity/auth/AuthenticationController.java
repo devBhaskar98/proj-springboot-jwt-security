@@ -14,9 +14,6 @@ import common.model.ErrorResponse;
 import common.model.RegisterRequest;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,14 +29,13 @@ public class AuthenticationController {
 
 	@PostMapping("/token")
 	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
-		
+
 		try {
 			return ResponseEntity.ok(service.authenticate(request));
-		} catch(AuthenticationException e) {
-            return ResponseEntity.badRequest().body(ErrorResponse.builder().msg(e.getMessage()).build());
+		} catch (AuthenticationException e) {
+			return ResponseEntity.badRequest().body(ErrorResponse.builder().msg(e.getMessage()).build());
 		}
-		
-		
+
 	}
 
 	@PostMapping("/refresh-token")
