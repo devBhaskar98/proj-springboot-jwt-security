@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,19 +53,27 @@ public class AuthenticationService {
 //    var jwtToken = jwtService.generateToken(user);
 		var refreshToken = jwtService.generateRefreshToken(user);
 		saveUserToken(savedUser, jwtToken);
-		return AuthenticationResponse.builder().emailId(request.getEmail()).accessToken(jwtToken).refreshToken(refreshToken).build();
+		return AuthenticationResponse.builder().emailId(request.getEmail()).accessToken(jwtToken)
+				.refreshToken(refreshToken).build();
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
-		authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-		var user = repository.findByEmail(request.getEmail()).orElseThrow();
+		try {
+			authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+			var user = repository.findByEmail(request.getEmail()).orElseThrow();
 
-		var jwtToken = jwtService.generateToken(user);
-		var refreshToken = jwtService.generateRefreshToken(user);
-		revokeAllUserTokens(user);
-		saveUserToken(user, jwtToken);
-		return AuthenticationResponse.builder().emailId(request.getEmail()).accessToken(jwtToken).refreshToken(refreshToken).build();
+			var jwtToken = jwtService.generateToken(user);
+			var refreshToken = jwtService.generateRefreshToken(user);
+			revokeAllUserTokens(user);
+			saveUserToken(user, jwtToken);
+			return AuthenticationResponse.builder().emailId(request.getEmail()).accessToken(jwtToken)
+					.refreshToken(refreshToken).build();
+		} catch (AuthenticationException e) {
+			throw e;
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed: " + e.getMessage());
+		}
+
 	}
 
 	private void saveUserToken(User user, String jwtToken) {

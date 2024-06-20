@@ -1,6 +1,5 @@
 package com.devProject.jwtsecurity.config;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +23,11 @@ public class ApplicationConfig {
 	private final UserRepository repository;
 
 	@Bean
+	public AuditorAware<Integer> auditorAware() {
+		return new ApplicationAuditAware();
+	}
+	
+	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> repository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -37,10 +41,6 @@ public class ApplicationConfig {
 		return authProvider;
 	}
 
-	@Bean
-	public AuditorAware<Integer> auditorAware() {
-		return new ApplicationAuditAware();
-	}
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
