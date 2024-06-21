@@ -1,6 +1,10 @@
 package com.devProject.jwtsecurity.demo;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.util.List;
 
@@ -31,10 +35,16 @@ public class AdminController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	AuthenticationService authService;
 
+	@Operation(summary = "Get list of admins")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "List of Admins", content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Book not found", content = @Content) })
 	@GetMapping
 	@PreAuthorize("hasAuthority('admin:read')")
 	public List<User> get() {
@@ -48,7 +58,6 @@ public class AdminController {
 		// add logic for data validation
 		return ResponseEntity.ok(authService.register(request));
 	}
-	
 
 	@PutMapping
 	@PreAuthorize("hasAuthority('admin:update')")

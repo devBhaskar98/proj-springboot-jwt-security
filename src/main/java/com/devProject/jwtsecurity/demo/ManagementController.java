@@ -28,7 +28,7 @@ import common.model.UpdateUserRequest;
 
 @RestController
 @RequestMapping("/api/v1/management")
-@Tag(name = "Management")
+//@Tag(name = "Management")
 public class ManagementController {
 
 	@Autowired
