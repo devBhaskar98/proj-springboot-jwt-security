@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.devProject.jwtsecurity.token.TokenService;
+
 import common.model.UpdateUserRequest;
 
 import java.security.Principal;
@@ -18,6 +20,7 @@ public class UserService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
+	private final TokenService tokenService;
 
 	public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
@@ -65,7 +68,11 @@ public class UserService {
 	}
 	
 	public String deleteUserById(int userId) {
+		
 		User updateUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+		// delete user token 
+		tokenService.deleteTokenById(updateUser.getId());
 		userRepository.deleteById(updateUser.getId());
 		return "Delete Successfully";
 	}

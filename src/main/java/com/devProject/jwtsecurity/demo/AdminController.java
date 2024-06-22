@@ -66,10 +66,10 @@ public class AdminController {
 		return userService.updateUser(userId, request);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("{userId}")
 	@PreAuthorize("hasAuthority('admin:delete')")
 	@Hidden
-	public String delete() {
-		return "DELETE:: admin controller";
+	public String delete(@PathVariable int userId) {
+		return userService.deleteUserById(userId);
 	}
 }
